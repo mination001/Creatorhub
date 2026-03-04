@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CreatorHub — Your YouTube Revenue Site</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+
+  <!-- ============================================================
+       HOW TO MONETIZE:
+       1. Sign up at https://adsense.google.com
+       2. Replace "ca-pub-XXXXXXXXXXXXXXXXX" below with your Publisher ID
+       3. AdSense will auto-fill the ad slots once your account is approved
+  ============================================================ -->
+  <meta name="google-adsense-account" content="ca-pub-7336391199792180">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7336391199792180" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --red:    #FF3333;
+      --dark:   #0A0A0A;
+      --card:   #111111;
+      --border: #1E1E1E;
+      --text:   #EAEAEA;
+      --muted:  #666666;
+      --accent: #FF3333;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.35;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .logo span { color: var(--red); }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    nav ul a:hover { color: var(--red); }
+    .nav-cta {
+      background: var(--red);
+      color: #fff !important;
+      padding: 0.45rem 1rem;
+      border-radius: 2px;
+    }
+    .nav-cta:hover { background: #cc0000; color: #fff !important; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(255,51,51,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid var(--red);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+    .hero h1 .line-red { color: var(--red); }
+    .hero-sub {
+      margin-top: 1.5rem;
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 300;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .hero-buttons {
+      margin-top: 2.5rem;
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.7s ease 0.3s both;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: #fff;
+      padding: 0.85rem 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      border: none; border-radius: 2px; cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: #cc0000; transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      border: 1px solid var(--border);
+      border-radius: 2px; cursor: pointer;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── AD SLOT (top banner) ── */
+    .ad-banner {
+      width: 100%; max-width: 970px; height: 90px;
+      margin: 2rem auto;
+      background: var(--card);
+      border: 1px dashed var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; color: var(--muted); letter-spacing: 2px;
+      border-radius: 4px;
+    }
+    /* Replace this div with your real AdSense <ins> tag */
+
+    /* ── STATS BAR ── */
+    .stats {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+    .stat-item {
+      flex: 1; min-width: 160px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      color: var(--red);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 5rem 2.5rem; max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .section-desc { color: var(--muted); max-width: 540px; font-weight: 300; }
+
+    /* ── VIDEOS GRID ── */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .video-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform .2s, border-color .2s;
+      cursor: pointer;
+    }
+    .video-card:hover { transform: translateY(-4px); border-color: var(--red); }
+    .video-thumb {
+      position: relative;
+      width: 100%; aspect-ratio: 9/16;
+      background: #1a1a1a;
+      overflow: hidden;
+    }
+    .video-thumb iframe {
+      width: 100%; height: 100%; border: none;
+    }
+    .video-thumb .play-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.3);
+      transition: background .2s;
+    }
+    .video-thumb .play-overlay:hover { background: rgba(255,51,51,0.3); }
+    .play-btn {
+      width: 52px; height: 52px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .play-btn svg { width: 20px; height: 20px; fill: white; margin-left: 3px; }
+    .video-info { padding: 1rem 1.2rem 1.2rem; }
+    .video-info h3 {
+      font-size: 0.95rem; font-weight: 600;
+      margin-bottom: 0.3rem; line-height: 1.4;
+    }
+    .video-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: var(--muted); letter-spacing: 1px;
+    }
+
+    /* ── MID AD SLOT ── */
+    .ad-mid {
+      width: 100%; max-width: 728px; height: 90px;
+      margin: 3rem auto;
+      background: var(--card);
+      border: 1px dashed var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; color: var(--muted); letter-spacing: 2px;
+      border-radius: 4px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .step-card:hover { border-color: var(--red); }
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem; line-height: 1;
+      color: rgba(255,51,51,0.12);
+      position: absolute; top: 0.5rem; right: 1rem;
+    }
+    .step-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .step-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .step-card p { font-size: 0.88rem; color: var(--muted); font-weight: 300; }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: center; margin-top: 1rem;
+    }
+    .about-img {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+      position: relative; overflow: hidden;
+    }
+    .about-img::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,51,51,0.08), transparent);
+    }
+    .about-text p { color: var(--muted); font-weight: 300; margin-bottom: 1rem; }
+    .about-text .channel-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--red); color: #fff;
+      padding: 0.7rem 1.5rem;
+      font-family: 'Space Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 1px; border-radius: 2px;
+      text-decoration: none; margin-top: 0.5rem;
+      transition: background .2s;
+    }
+    .about-text .channel-link:hover { background: #cc0000; }
+
+    /* ── SIDEBAR AD ── */
+    .content-with-sidebar {
+      display: grid; grid-template-columns: 1fr 300px; gap: 2rem;
+      max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
+    }
+    .ad-sidebar {
+      width: 300px; min-height: 250px;
+      background: var(--card);
+      border: 1px dashed var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; color: var(--muted); letter-spacing: 2px;
+      border-radius: 4px; align-self: start; position: sticky; top: 80px;
+    }
+
+    /* ── NEWSLETTER ── */
+    .newsletter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      max-width: 1200px;
+      margin: 0 auto 5rem;
+    }
+    .newsletter::before {
+      content: '';
+      position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,51,51,0.1), transparent 70%);
+      pointer-events: none;
+    }
+    .newsletter h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; margin-bottom: 0.5rem;
+    }
+    .newsletter p { color: var(--muted); margin-bottom: 1.5rem; font-weight: 300; }
+    .newsletter-form {
+      display: flex; gap: 0.75rem; max-width: 480px; margin: 0 auto;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .newsletter-form input {
+      flex: 1; min-width: 220px;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .newsletter-form input:focus { border-color: var(--red); }
+    .newsletter-form button {
+      background: var(--red); color: #fff;
+      border: none; padding: 0.75rem 1.5rem;
+      font-family: 'Space Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 1px; border-radius: 2px; cursor: pointer;
+      transition: background .2s;
+    }
+    .newsletter-form button:hover { background: #cc0000; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer .logo { font-size: 1.3rem; }
+    footer p { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; }
+    .social-links { display: flex; gap: 1rem; }
+    .social-links a {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; transition: border-color .2s, color .2s;
+    }
+    .social-links a:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .content-with-sidebar { grid-template-columns: 1fr; }
+      .ad-sidebar { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    /* ── SETUP MODAL ── */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10000; padding: 1rem;
+    }
+    .modal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; padding: 2.5rem; max-width: 540px; width: 100%;
+      position: relative;
+    }
+    .modal h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; }
+    .modal p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .modal label { display: block; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 1px; color: var(--muted); margin-bottom: 0.3rem; }
+    .modal input, .modal textarea {
+      width: 100%; background: var(--dark);
+      border: 1px solid var(--border); border-radius: 2px;
+      padding: 0.7rem 1rem; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      outline: none; margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .modal input:focus, .modal textarea:focus { border-color: var(--red); }
+    .modal textarea { height: 80px; resize: vertical; }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.2rem; cursor: pointer;
+    }
+    .modal-close:hover { color: var(--red); }
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+  </style>
+</head>
+<body>
+
+<!-- ── SETUP MODAL ── -->
+<div class="modal-bg" id="setupModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Set Up Your <span style="color:var(--red)">Channel</span></h2>
+    <p>Personalize your site. You can change these any time in the HTML file.</p>
+
+    <label>YOUR CHANNEL NAME</label>
+    <input id="inputName" type="text" placeholder="e.g. Alex Creates" value=""/>
+
+    <label>YOUR YOUTUBE CHANNEL URL</label>
+    <input id="inputURL" type="text" placeholder="https://youtube.com/@yourchannel" value=""/>
+
+    <label>SHORT BIO (1–2 sentences)</label>
+    <textarea id="inputBio" placeholder="I make videos about tech, lifestyle & more. Join the community!"></textarea>
+
+    <label>YOUR GOOGLE ADSENSE PUBLISHER ID</label>
+    <input id="inputAdsense" type="text" placeholder="ca-pub-XXXXXXXXXXXXXXXXX" value=""/>
+
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeModal()">Skip for now</button>
+      <button class="btn-primary" onclick="applySetup()">Apply & Launch ▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="logo"><span id="navLogo">CREATOR</span><span style="color:var(--red)">HUB</span></div>
+  <ul>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#monetize">Monetize</a></li>
+    <li><a href="#newsletter">Newsletter</a></li>
+    <li><a href="#" id="channelNavBtn" class="nav-cta">Subscribe ▶</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-tag">🎬 YouTube Creator</div>
+  <h1 id="heroTitle">WATCH.<br><span class="line-red">GROW.</span><br>EARN.</h1>
+  <p class="hero-sub" id="heroSub">Every view counts. Every subscriber matters. Turn your passion into income — starting today.</p>
+  <div class="hero-buttons">
+    <a href="#videos" class="btn-primary">Watch Latest Videos ▶</a>
+    <a href="#" id="heroSubscribeBtn" class="btn-outline">Subscribe on YouTube</a>
+  </div>
+</div>
+
+<!-- ── TOP AD BANNER ── -->
+<!-- 
+  ====================================================
+  ADSENSE LEADERBOARD AD (728×90 or 970×90)
+  Replace the div below with your AdSense <ins> tag:
+  
+  <ins class="adsbygoogle"
+    style="display:block;width:728px;height:90px;margin:2rem auto;"
+    data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+    data-ad-slot="XXXXXXXXXX"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  ====================================================
+-->
+<div style="text-align:center;margin:2rem auto;max-width:970px;">
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-7336391199792180"
+    data-ad-slot="auto"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- ── STATS ── -->
+<div class="stats">
+  <div class="stat-item reveal"><div class="stat-number" id="statViews">0</div><div class="stat-label">Total Views</div></div>
+  <div class="stat-item reveal"><div class="stat-number" id="statSubs">0</div><div class="stat-label">Subscribers</div></div>
+  <div class="stat-item reveal"><div class="stat-number" id="statVideos">0</div><div class="stat-label">Videos</div></div>
+  <div class="stat-item reveal"><div class="stat-number">$0.01–$0.05</div><div class="stat-label">Avg. Revenue / View</div></div>
+</div>
+
+<!-- ── VIDEOS + SIDEBAR ── -->
+<div class="content-with-sidebar" id="videos">
+  <section style="padding: 4rem 0;">
+    <div class="section-label">Latest Content</div>
+    <h2 class="section-title">RECENT<br>VIDEOS</h2>
+    <p class="section-desc">Every video you post here drives views — and ad revenue.</p>
+
+    <!-- VIDEO GRID -->
+    <div class="videos-grid" id="videoGrid">
+
+      <!-- 
+        =====================================================
+        HOW TO ADD YOUR VIDEOS:
+        1. Go to your YouTube video
+        2. Click Share → Embed → Copy the src URL
+        3. Replace "VIDEO_ID_1" etc. with your actual video IDs
+        
+        Example ID: In https://youtu.be/dQw4w9WgXcQ → dQw4w9WgXcQ
+        =====================================================
+      -->
+
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/hIcrQqg71Ww" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info">
+          <h3>Short #1</h3>
+          <div class="video-meta">NEW UPLOAD &nbsp;·&nbsp; YOUR CHANNEL</div>
+        </div>
+      </div>
+
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/CyUAGx0SpBI" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info">
+          <h3>Short #2</h3>
+          <div class="video-meta">TRENDING &nbsp;·&nbsp; YOUR CHANNEL</div>
+        </div>
+      </div>
+
+      <div class="video-card reveal">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/XTJudfZfLkA" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info">
+          <h3>Short #3</h3>
+          <div class="video-meta">POPULAR &nbsp;·&nbsp; YOUR CHANNEL</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SIDEBAR AD -->
+  <!--
+    ===================================================
+    ADSENSE RECTANGLE AD (300×250)
+    Replace the div below with your AdSense <ins> tag:
+    
+    <ins class="adsbygoogle"
+      style="display:block;width:300px;height:250px;"
+      data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+      data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    ===================================================
+  -->
+  <div style="width:300px;align-self:start;position:sticky;top:80px;">
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-7336391199792180"
+      data-ad-slot="auto"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+
+<!-- ── MID AD ── -->
+<!--
+  ===================================================
+  ADSENSE IN-CONTENT AD (728×90)
+  Replace below with your AdSense <ins> tag
+  ===================================================
+-->
+<div style="text-align:center;margin:3rem auto;max-width:728px;">
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-7336391199792180"
+    data-ad-slot="auto"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="monetize" class="reveal">
+  <div class="section-label">Revenue Guide</div>
+  <h2 class="section-title">HOW YOU<br>EARN</h2>
+  <p class="section-desc">Here's the simple path from video upload to income in your account.</p>
+
+  <div class="steps">
+    <div class="step-card reveal">
+      <div class="step-num">01</div>
+      <div class="step-icon">🎥</div>
+      <h3>Upload a Video</h3>
+      <p>Post any video to your YouTube channel — tutorials, vlogs, reviews, anything.</p>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">02</div>
+      <div class="step-icon">🌐</div>
+      <h3>Share This Site</h3>
+      <p>Drive traffic here. Visitors watch your embedded videos and see ads on the page.</p>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">03</div>
+      <div class="step-icon">📢</div>
+      <h3>Ads Are Shown</h3>
+      <p>Google AdSense automatically displays relevant ads to every visitor on your site.</p>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">04</div>
+      <div class="step-icon">💰</div>
+      <h3>You Get Paid</h3>
+      <p>Earn per click and per 1,000 views (RPM). AdSense pays monthly to your bank.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img reveal">🎬</div>
+    <div class="about-text reveal">
+      <div class="section-label">About the Creator</div>
+      <h2 class="section-title" id="aboutTitle">ABOUT<br>ME</h2>
+      <p id="aboutBio">Hey! I create content that informs, entertains, and inspires. Every video is made with passion and purpose — and every view helps me keep going.</p>
+      <p>Subscribe to stay updated with the latest uploads, and share the videos with your friends to grow our community together.</p>
+      <a href="#" id="aboutChannelBtn" class="channel-link" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+        Visit My YouTube Channel
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── NEWSLETTER ── -->
+<div class="newsletter reveal" id="newsletter">
+  <h2>DON'T MISS A <span style="color:var(--red)">VIDEO</span></h2>
+  <p>Get notified every time I upload. No spam — just fresh content.</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder="Enter your email address" id="emailInput"/>
+    <button onclick="subscribeEmail()">NOTIFY ME</button>
+  </div>
+  <p id="emailMsg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--red);display:none;">🎉 You're subscribed!</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="logo"><span id="footerLogo">CREATOR</span><span style="color:var(--red)">HUB</span></div>
+  <p>© 2025 · POWERED BY GOOGLE ADSENSE · ALL VIEWS COUNT</p>
+  <div class="social-links">
+    <a href="#" id="footerYT" title="YouTube" target="_blank">▶</a>
+    <a href="#" title="Twitter">𝕏</a>
+    <a href="#" title="Instagram">◎</a>
+  </div>
+</footer>
+
+<script>
+  // ── SETUP MODAL ──
+  function closeModal() {
+    document.getElementById('setupModal').style.display = 'none';
+  }
+
+  function applySetup() {
+    const name    = document.getElementById('inputName').value.trim();
+    const url     = document.getElementById('inputURL').value.trim();
+    const bio     = document.getElementById('inputBio').value.trim();
+    const adsense = document.getElementById('inputAdsense').value.trim();
+
+    if (name) {
+      document.getElementById('navLogo').textContent = name.toUpperCase();
+      document.getElementById('footerLogo').textContent = name.toUpperCase();
+      document.getElementById('heroTitle').innerHTML = 'WATCH.<br><span class="line-red">GROW.</span><br>EARN.';
+      document.getElementById('aboutTitle').innerHTML = 'ABOUT<br>' + name.toUpperCase().split(' ')[0];
+    }
+    if (url) {
+      document.getElementById('channelNavBtn').href = url;
+      document.getElementById('heroSubscribeBtn').href = url;
+      document.getElementById('aboutChannelBtn').href = url;
+      document.getElementById('footerYT').href = url;
+    }
+    if (bio) {
+      document.getElementById('aboutBio').textContent = bio;
+      document.getElementById('heroSub').textContent = bio;
+    }
+    if (adsense) {
+      alert('AdSense ID saved! To fully activate ads:\n1. Add the AdSense <script> tag in the <head>\n2. Replace each ad placeholder div with your <ins> tags\n3. Host on a public domain so AdSense can serve live ads.');
+    }
+
+    closeModal();
+  }
+
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── ANIMATED COUNTERS ──
+  function animateCount(el, target, suffix = '') {
+    let start = 0;
+    const duration = 1600;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { el.textContent = target.toLocaleString() + suffix; clearInterval(timer); }
+      else { el.textContent = Math.floor(start).toLocaleString() + suffix; }
+    }, 16);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCount(document.getElementById('statViews'), 12400, '+');
+        animateCount(document.getElementById('statSubs'), 843, '+');
+        animateCount(document.getElementById('statVideos'), 27);
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  statsObserver.observe(document.querySelector('.stats'));
+
+  // ── EMAIL SUBSCRIBE ──
+  function subscribeEmail() {
+    const v = document.getElementById('emailInput').value;
+    if (!v || !v.includes('@')) { alert('Please enter a valid email.'); return; }
+    document.getElementById('emailMsg').style.display = 'block';
+    document.getElementById('emailInput').value = '';
+  }
+</script>
+</body>
+</html>
